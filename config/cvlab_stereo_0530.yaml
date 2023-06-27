@@ -1,0 +1,116 @@
+%YAML:1.0
+
+#common parameters
+imu: 1
+num_of_cam: 2
+
+imu_topic: "/livox/imu"
+image0_topic: "/cam0/compressed"
+image1_topic: "/cam1/compressed"
+
+output_path: "~/output"
+
+cam0_calib: "cvlab_cam0_pinhole_0530.yaml"
+cam1_calib: "cvlab_cam1_pinhole_0530.yaml"
+
+image_width: 1280
+image_height: 720
+
+distortion_parameters:
+   k1: -0.35866339052162377
+   k2: 0.14886143788297318
+   p1: 0.0002815532809810967
+   p2: 0.00040207936847531234
+
+projection_parameters:
+   fx: 731.2592265895066
+   fy: 730.07196860144
+   cx: 630.2460232287447
+   cy: 353.5411952863725
+
+
+# Extrinsic parameter between IMU and Camera.
+estimate_extrinsic: 0   # 0  Have an accurate extrinsic parameters. We will trust the following imu^R_cam, imu^T_cam, don't change it.
+                        # 1  Have an initial guess about extrinsic parameters. We will optimize around your initial guess.
+
+
+# imu_T_cam0
+# LiDAR - IMU :: x=11.0 mm, y=23.29 mm, z=-44.12 mm.
+
+# imu_T_cam0 : Pose transformation
+extrinsicRotation_0: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 1.0,  0.0,  0.0,
+          -0.0,  0.0,  1.0,
+           0.0, -1.0,  0.0]
+
+extrinsicTranslation_0: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ -0.071, 0.03421, 0.01512]
+
+# static const Eigen::Vector3d Lidar_offset_to_IMU(-0.011, -0.02329, 0.04412); // Avia
+
+
+# imu_T_cam1 : Pose transformation
+extrinsicRotation_1: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+         
+   data: [ 0.9999376164577173, -0.010844960392063, -0.00267395343152,
+            0.0026651153640966, -0.000829317079577, 0.9999961046890522,
+            -0.0108471357028211, -0.9999408477841458, -0.0008003622732767]
+
+extrinsicTranslation_1: !!opencv-matrix
+   rows: 3
+   cols: 1
+   dt: d
+   data: [ 0.04634652124527274, 0.0329113043315925457, 0.011642802402496642]
+
+
+#Multiple thread support
+
+#feature traker paprameters
+max_cnt: 200            # max feature number in feature tracking
+min_dist: 30            # min distance between two features
+freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image
+F_threshold: 1.0        # ransac threshold (pixel)
+show_track: 1           # publish tracking image as topic
+flow_back: 1            # perform forward and backward optical flow to improve feature tracking accuracy
+equalize: 0             # if image is too dark or light, trun on equalize to find enough features
+fisheye: 0              # if using fisheye, trun on it. A circle mask will be loaded to remove edge noisy points
+
+#optimization parameters
+max_solver_time: 0.08  # max solver itration time (ms), to guarantee real time
+max_num_iterations: 10  # max solver itrations, to guarantee real time
+keyframe_parallax: 15  # keyframe selection threshold (pixel)
+
+#imu parameters       The more accurate parameters you provide, the better performance
+acc_n: 0.1          # accelerometer measurement noise standard deviation. #0.2   0.04
+gyr_n: 0.01         # gyroscope measurement noise standard deviation.     #0.05  0.004
+acc_w: 0.001         # accelerometer bias random work noise standard deviation.  #0.02
+gyr_w: 1.0e-4       # gyroscope bias random work noise standard deviation.     #4.0e-5
+
+# acc_n: 9.033681031140872e-03          # accelerometer measurement noise standard deviation.
+# gyr_n: 9.868891341115668e-03          # gyroscope measurement noise standard deviation.
+# acc_w: 8.697744813666742e-04          # accelerometer bias random work noise standard deviation.
+# gyr_w: 2.1037125276569627e-03         # gyroscope bias random work noise standard deviation.
+
+g_norm: 1.0     # gravity magnitude
+
+#unsynchronization parameters
+estimate_td: 0                      # online estimate time offset between camera and imu
+td: 0.000                            # initial value of time offset. unit: s. readed image clock + td = real image clock (IMU clock)
+
+#rolling shutter parameters
+rolling_shutter: 0                  # 0: global shutter camera, 1: rolling shutter camera
+rolling_shutter_tr: 0.033           # unit: s. rolling shutter read out time per frame (from data sheet).
+
+#visualization parameters
+save_image: 0                   # save image in pose graph for visualization prupose; you can close this function by setting 0 
+visualize_imu_forward: 0        # output imu forward propogation to achieve low latency and high frequence results
+visualize_camera_size: 0.4      # size of camera marker in RVIZ
