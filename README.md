@@ -50,5 +50,5 @@ The result of [3stair_long.bag](To do :: upload link) :
 
 and [parking_1st.bag](To do :: upload link) :
 <div align="center">
-    <img src="pics/parkinglot.png" width = 60% >
+    <img src="pics/parking_lot.png" width = 60% >
 </div>
