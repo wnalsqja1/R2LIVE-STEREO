@@ -45,10 +45,10 @@ rosbag play DOWNLOADED_FILE.bag
 
 The result of [3stair_long.bag](To do :: upload link) :
 <div align="center">
-    <img src="pics/indoor_aggressive_bag_res.png" width = 60% >
+    <img src="pics/3stair_long.png" width = 60% >
 </div>
 
 and [parking_1st.bag](To do :: upload link) :
 <div align="center">
-    <img src="pics/cover.png" width = 60% >
+    <img src="pics/parkinglot.png" width = 60% >
 </div>
